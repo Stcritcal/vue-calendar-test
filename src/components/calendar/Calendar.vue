@@ -45,7 +45,7 @@ const calendarBodyPayload = computed(() => {
         month: currentIteration.getMonth(),
         year: currentIteration.getFullYear(),
         isOutsideMonth: currentIteration.getMonth() === calendarStore.currentMonth,
-        isToday: currentIteration.getDate() === calendarStore.currentDay && currentIteration.getMonth() === calendarStore.currentMonth && currentIteration.getFullYear() === calendarStore.currentYear,
+        isToday: currentIteration.getDate() === calendarStore.now.getDate() && currentIteration.getMonth() === calendarStore.now.getMonth() && currentIteration.getFullYear() === calendarStore.now.getFullYear(),
         reminders: remindersForDay,
         dayOfWeek: currentIteration.getDay(),
       });
@@ -75,6 +75,7 @@ const onAddButtonClicked = (day: CalendarDay) => {
 };
 
 const onDayCellClicked = (day: CalendarDay) => {
+  // If it's in the current month, open the date details as usual
   dateDetailsOffcanvasStore.openDateDetails(day);
 };
 
@@ -83,8 +84,28 @@ const onDayCellClicked = (day: CalendarDay) => {
 
 <template>
   <div class="flex flex-col bg-gray-100 rounded-3xl p-4 w-full max-w-[960px] gap-2">
-    <div class="flex flex-row justify-center py-6">
-      <div class="text-5xl">{{ currentMonthName }} {{ calendarStore.currentYear }}</div>
+    <div class="flex flex-row justify-between items-center py-6">
+      <button 
+        @click="calendarStore.goToPreviousMonth()"
+        class="flex items-center justify-center w-12 h-12 rounded-full bg-gray-800 text-white hover:bg-gray-700 transition-colors"
+        aria-label="Previous month"
+      >
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+        </svg>
+      </button>
+      
+      <div class="text-5xl font-semibold">{{ currentMonthName }} {{ calendarStore.currentYear }}</div>
+      
+      <button 
+        @click="calendarStore.goToNextMonth()"
+        class="flex items-center justify-center w-12 h-12 rounded-full bg-gray-800 text-white hover:bg-gray-700 transition-colors"
+        aria-label="Next month"
+      >
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+        </svg>
+      </button>
     </div>
     <div class="flex flex-row justify-between mt-4 gap-2">
       <div
