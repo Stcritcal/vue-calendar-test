@@ -1,9 +1,12 @@
+import type { City } from './City.js';
+import { mappedCities } from '../stores/cities.js';
+
 export default class Reminder {
   id: number;
   title: string;
   color: string;
   date: Date;
-  city?: string;
+  city?: City;
   weather?: string;
 
   constructor(payload: any) {
@@ -11,7 +14,16 @@ export default class Reminder {
     this.title = payload.title.trim();
     this.color = payload.color;
     this.date = new Date(payload.date);
-    this.city = payload.city;
+
+    // Handle both old string format and new City object format for backwards compatibility
+    if (typeof payload.city === 'string') {
+      // Convert string to City object by finding it in mappedCities
+      this.city = mappedCities.find(city => city.name === payload.city) || undefined;
+    } else {
+      console.log('Payload city:', payload.city);
+      this.city = payload.city;
+    }
+
     this.weather = payload.weather;
   }
 

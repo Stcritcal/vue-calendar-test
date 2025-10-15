@@ -3,12 +3,27 @@ import { ref, computed } from 'vue';
 import Modal from '../modal/Modal.vue';
 import { useReminderModalStore } from '../../stores/reminderModal';
 import { useRemindersStore } from '../../stores/reminders';
-import Reminder from '@/model/Reminder';
+import { mappedCities } from '@/stores/cities';
 
 const reminderModalStore = useReminderModalStore();
 const remindersStore = useRemindersStore();
 
 const errorMessage = ref<string>('');
+const isLoading = ref<boolean>(false);
+
+const selectedCityValue = computed({
+  get: () => {
+    return reminderModalStore.city ? reminderModalStore.city.name : '';
+  },
+  set: (value: string) => {
+    if (value) {
+      const selectedCity = mappedCities.find(city => city.name === value);
+      reminderModalStore.city = selectedCity || null;
+    } else {
+      reminderModalStore.city = null;
+    }
+  }
+});
 
 const dateInput = computed({
   get: () => {
@@ -33,9 +48,10 @@ const dateInput = computed({
 
 
 
-const saveReminder = () => {
+const saveReminder = async () => {
   try {
     errorMessage.value = '';
+    isLoading.value = true;
 
     const reminderData = {
       title: reminderModalStore.title,
@@ -46,32 +62,27 @@ const saveReminder = () => {
       weather: reminderModalStore.weather
     };
 
-    // Combine date and time into a single Date object
-    const dateTime = new Date(reminderData.date!);
-    const [hours, minutes] = reminderData.time.split(':').map(Number);
-    dateTime.setHours(hours, minutes, 0, 0);
-
-    if(reminderModalStore.id) {
+    if(reminderModalStore.id != null) {
       const updatedReminderData = { 
         ...reminderData, 
         id: reminderModalStore.id,
-        date: dateTime // Use the combined datetime
       };
-      remindersStore.updateReminder(new Reminder(updatedReminderData));
+      await remindersStore.updateReminder(updatedReminderData);
       reminderModalStore.id = null; // Clear ID after updating
       reminderModalStore.modalModelValue = false;
       return;
     }
     
-    // Update the reminderData with combined datetime before adding
+    // Add new reminder with weather data fetched automatically
     const finalReminderData = { 
       ...reminderData, 
-      date: dateTime 
     };
-    remindersStore.addReminder(finalReminderData);
+    await remindersStore.addReminder(finalReminderData);
     reminderModalStore.modalModelValue = false;
   } catch (error) {
     errorMessage.value = error instanceof Error ? error.message : 'An error occurred';
+  } finally {
+    isLoading.value = false;
   }
 };
 
@@ -128,27 +139,34 @@ const cancelReminder = () => {
           />
         </div>
 
-        <div class="flex items-center gap-2">
+        <div class="flex flex-col gap-2">
           <label class="text-sm font-medium text-gray-700">Color:</label>
           <input
             id="reminder-color-input"
             name="reminder-color-input"
             type="color" 
             v-model="reminderModalStore.color"
-            class="w-12 h-8 border border-gray-300 rounded cursor-pointer"
+            class="w-full h-8 p-1 border border-gray-300 rounded cursor-pointer"
           />
         </div>
 
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-1">City (optional)</label>
-          <input
+          <select
             id="reminder-city-input"
             name="reminder-city-input"
-            type="text"
-            placeholder="Event City"
-            v-model="reminderModalStore.city"
+            v-model="selectedCityValue"
             class="p-2 border border-gray-300 rounded-lg w-full"
-          />
+          >
+            <option value="">Select a city</option>
+            <option 
+              v-for="city in mappedCities" 
+              :key="city.name" 
+              :value="city.name"
+            >
+              {{ city.flag }} {{ city.name }}
+            </option>
+          </select>
         </div>
       </div>
     </template>
@@ -162,9 +180,15 @@ const cancelReminder = () => {
         </button>
         <button 
           @click="saveReminder"
-          class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+          :disabled="isLoading"
+          :class="[
+            'px-4 py-2 text-white rounded-lg transition-colors',
+            isLoading 
+              ? 'bg-gray-400 cursor-not-allowed' 
+              : 'bg-blue-500 hover:bg-blue-600'
+          ]"
         >
-          Save
+          {{ isLoading ? 'Fetching Weather...' : 'Save' }}
         </button>
       </div>
     </template>

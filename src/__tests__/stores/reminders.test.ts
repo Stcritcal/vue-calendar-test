@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach } from 'vitest';
 import { setActivePinia, createPinia } from 'pinia';
 import { useRemindersStore } from '../../stores/reminders.js';
 import Reminder from '../../model/Reminder.js';
+import { mappedCities } from '../../stores/cities.js';
 
 describe('Reminders Store', () => {
   beforeEach(() => {
@@ -13,12 +14,14 @@ describe('Reminders Store', () => {
       const store = useRemindersStore();
       const initialCount = store.reminders.length;
 
+      const testCity = mappedCities.find(city => city.name === 'New York') || null;
+
       const newReminder = {
         title: 'Test Reminder',
         date: new Date('2024-10-15'),
         time: '14:30',
         color: '#ff0000',
-        city: 'Gotham city'
+        city: testCity
       };
 
       store.addReminder(newReminder);
@@ -182,12 +185,14 @@ describe('Reminders Store', () => {
       const store = useRemindersStore();
       const existingId = store.reminders[0].id;
 
+      const updatedCity = mappedCities.find(city => city.name === 'London') || null;
+
       const updatedReminder = new Reminder({
         id: existingId,
         title: 'Updated Title',
         color: '#00ff00',
         date: new Date(),
-        city: 'Updated City'
+        city: updatedCity
       });
 
       store.updateReminder(updatedReminder);

@@ -31,7 +31,7 @@ const editReminder = (reminderId: number) => {
     reminderModalStore.time = `${hours}:${minutes}`;
     
     reminderModalStore.color = reminder.color;
-    reminderModalStore.city = reminder.city || '';
+    reminderModalStore.city = reminder.city || null;
     reminderModalStore.weather = reminder.weather || '';
     
     // Open the modal
@@ -59,7 +59,7 @@ defineProps<{
         {{ reminder.title }}
       </div>
       <div class="text-xs text-gray-500 overflow-hidden text-ellipsis whitespace-nowrap">
-        {{ reminder.date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }} • {{ reminder.city || 'No city' }} • {{ reminder.weather || 'No weather' }}
+        {{ reminder.date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }} • {{ reminder.city ? `${reminder.city.flag} ${reminder.city.name}` : 'No city' }} • {{ reminder.weather || 'No weather' }}
       </div>
     </div>
     <IconButton icon="edit" @click="editReminder(reminder.id)" />

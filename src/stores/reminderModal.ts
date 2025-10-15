@@ -1,5 +1,6 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
+import type { City } from '@/model/City.js'
 
 export const useReminderModalStore = defineStore('reminderModal', () => {
   const modalModelValue = ref<boolean>(false);
@@ -12,7 +13,7 @@ export const useReminderModalStore = defineStore('reminderModal', () => {
   const date = ref<Date | null>(null);
   const time = ref<string>('');
   const color = ref<string>('#3888ff');
-  const city = ref<string>('');
+  const city = ref<City | null>(null);
   const weather = ref<string>('');
 
   const setupNewEventForm = (selectedDate: { day: number; month: number; year: number }) => {
@@ -21,7 +22,7 @@ export const useReminderModalStore = defineStore('reminderModal', () => {
     date.value = new Date(selectedDate.year, selectedDate.month, selectedDate.day);
     time.value = '';
     color.value = '#3888ff';
-    city.value = '';
+    city.value = null;
     weather.value = '';
   }
 
