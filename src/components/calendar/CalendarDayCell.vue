@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import CalendarDay from './CalendarDay';
+import CalendarDay from '../../model/CalendarDay';
 import computeLuminance from '@/utils/computeLuminance';
 import Reminder from '@/model/Reminder';
 

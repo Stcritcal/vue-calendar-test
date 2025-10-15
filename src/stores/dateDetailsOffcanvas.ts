@@ -1,4 +1,4 @@
-import CalendarDay from "@/components/calendar/CalendarDay.js";
+import CalendarDay from "@/model/CalendarDay.js";
 import { defineStore } from "pinia";
 import { ref } from "vue";
 

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useCalendarStore } from '@/stores/calendar';
 import { computed } from 'vue';
-import CalendarDay from './CalendarDay';
+import CalendarDay from '../../model/CalendarDay';
 import CalendarDayCell from './CalendarDayCell.vue';
 import { useReminderModalStore } from '@/stores/reminderModal';
 import { useRemindersStore } from '@/stores/reminders';
