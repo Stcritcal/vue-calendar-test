@@ -1,11 +1,15 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import Calendar from './components/calendar/Calendar.vue';
+import DateDetailsOffcanvas from './components/dateDetailsOffcanvas/DateDetailsOffcanvas.vue';
+import ReminderModal from './components/reminderModal/ReminderModal.vue';
+</script>
 
 <template>
-  <h1>You did it!</h1>
-  <p>
-    Visit <a href="https://vuejs.org/" target="_blank" rel="noopener">vuejs.org</a> to read the
-    documentation
-  </p>
+  <div class="flex flex-col items-center w-full mt-12">
+    <DateDetailsOffcanvas />
+    <ReminderModal />
+    <Calendar/>
+  </div>
 </template>
 
 <style scoped></style>

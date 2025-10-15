@@ -1,6 +1,8 @@
-# vue-calendar-test
+# Vue calendar test
 
-This template should help get you started developing with Vue 3 in Vite.
+This project consists on the code to accomplish Jobsity's Front-end Javascript Challenge.
+
+The challenge asks us to develop a calendar component using Vue. This calendar main functionality is to display reminders to the user, ensuring that the UI supports a large number of reminders in each calendar cell.
 
 ## Recommended IDE Setup
 
@@ -14,14 +16,6 @@ This template should help get you started developing with Vue 3 in Vite.
 - Firefox:
   - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
   - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
-
-## Type Support for `.vue` Imports in TS
-
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vite.dev/config/).
 
 ## Project Setup
 
